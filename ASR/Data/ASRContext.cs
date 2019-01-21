@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace asr.Models
+namespace ASR.Models
 {
-    public class asrContext : IdentityDbContext<IdentityUser>
+    public class ASRContext : IdentityDbContext<ApplicationUser>
     {
-        public asrContext(DbContextOptions<asrContext> options)
+        public ASRContext(DbContextOptions<ASRContext> options)
             : base(options)
         {
         }

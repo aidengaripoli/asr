@@ -1,6 +1,6 @@
 using System;
 
-namespace asr.Models
+namespace ASR.Models
 {
     public class ErrorViewModel
     {

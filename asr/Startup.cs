@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ASR.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ASR.Models;
 
-namespace asr
+namespace ASR
 {
     public class Startup
     {
@@ -31,6 +35,12 @@ namespace asr
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDbContext<ASRContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("ASRContextConnection")));
+
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddEntityFrameworkStores<ASRContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -41,6 +51,7 @@ namespace asr
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -50,8 +61,9 @@ namespace asr
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            //app.UseCookiePolicy();
+
             app.UseAuthentication();
-            app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {
