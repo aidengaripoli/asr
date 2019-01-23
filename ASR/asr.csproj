@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="Areas\Identity\Services\" />
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.2" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
-for details on configuring this project to bundle and minify static web assets. */
-body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
-
+﻿
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -12,26 +6,51 @@ body {
     padding-right: 15px;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: normal;
 }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
+.asr-font {
+    font-family: 'Love Ya Like A Sister', cursive;
 }
 
-/* QR code generator */
-#qrCode {
-    margin: 15px;
+.container {
+    position: relative;
+    padding: 0;
 }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
+/* Bottom right text */
+.text-block {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.text-sm {
+    font-size: 12px;
+}
+
+.text-lg {
+    font-size: 18px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.bg-light-blue-solid {
+    background-color: #e3f2fd;
+}
+
+.bg-light-blue {
+    background-image: radial-gradient(#e3f2fd, #ceeaff);
+}
+.bg-grey {
+    background-image: radial-gradient(#d2d7db, #babfc3);
+}
+
+.card {
+    padding: 0px;
 }
