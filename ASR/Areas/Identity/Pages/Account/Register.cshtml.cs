@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using ASR.Data;
 using ASR.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +48,9 @@ namespace ASR.Areas.Identity.Pages.Account
 
             [Required]
             [EmailAddress]
-            [SchoolEmailValidation]
+            //[SchoolEmailValidation]
+            [RegularExpression(@"^s\d{7}@student.rmit.edu.au|e\d{5}@rmit.edu.au$",
+                ErrorMessage = "Email address is not in a valid format.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -73,8 +76,19 @@ namespace ASR.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { Name = Input.Name, UserName = Input.Email, Email = Input.Email };
+                var id = Input.Email.Split('@')[0];
+
+                var user = new ApplicationUser { Name = Input.Name, UserName = Input.Email, Email = Input.Email, SchoolID = id };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                var role = user.UserName.StartsWith('e')
+                    ? Constants.StaffRole
+                    : user.UserName.StartsWith('s')
+                    ? Constants.StudentRole
+                    : throw new Exception();
+
+                await _userManager.AddToRoleAsync(user, role);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");

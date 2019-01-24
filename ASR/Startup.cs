@@ -41,7 +41,8 @@ namespace ASR
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddDefaultUI()
-                .AddEntityFrameworkStores<ASRContext>();
+                .AddEntityFrameworkStores<ASRContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
