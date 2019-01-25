@@ -1,0 +1,61 @@
+﻿@model IEnumerable<ASR.Models.Slot>
+
+@{
+    ViewData["Title"] = "Slot";
+}
+
+<h2>Slot</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Staff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomID)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Staff.SchoolID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.SchoolID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomID)
+                </td>
+                <td>
+                    <form asp-action="Delete">
+                        <input name="roomID" value="@item.RoomID" type="hidden" />
+                        <input name="startTime" value="@item.StartTime" type="hidden" />
+                        <input type="submit" value="Delete" class="btn btn-default" />
+                    </form>
+                    <form asp-action="Edit">
+                        <input name="roomID" value="@item.RoomID" type="hidden" />
+                        <input name="startTime" value="@item.StartTime" type="hidden" />
+                        <input type="submit" value="Book" class="btn btn-default" />
+                    </form>
+                </td>
+        </tr>
+        }
+        </tbody>
+    </table>

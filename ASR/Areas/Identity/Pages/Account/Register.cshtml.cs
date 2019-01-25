@@ -81,6 +81,7 @@ namespace ASR.Areas.Identity.Pages.Account
                 var user = new ApplicationUser { Name = Input.Name, UserName = Input.Email, Email = Input.Email, SchoolID = id };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
+
                 var role = user.UserName.StartsWith('e')
                     ? Constants.StaffRole
                     : user.UserName.StartsWith('s')

@@ -36,13 +36,14 @@ namespace ASR
             });
 
             services.AddDbContext<ASRContext>(options =>
-                options.UseSqlServer(
+                options.UseLazyLoadingProxies().UseSqlServer(
                     Configuration.GetConnectionString("ASRContextConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ASRContext>()
                 .AddDefaultTokenProviders();
+
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {

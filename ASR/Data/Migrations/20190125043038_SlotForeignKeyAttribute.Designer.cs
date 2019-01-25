@@ -4,14 +4,16 @@ using ASR.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ASR.Data.Migrations
 {
     [DbContext(typeof(ASRContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190125043038_SlotForeignKeyAttribute")]
+    partial class SlotForeignKeyAttribute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,7 +93,8 @@ namespace ASR.Data.Migrations
 
                     b.Property<DateTime>("StartTime");
 
-                    b.Property<string>("StaffID");
+                    b.Property<string>("StaffID")
+                        .IsRequired();
 
                     b.Property<string>("StudentID");
 
@@ -223,7 +226,8 @@ namespace ASR.Data.Migrations
 
                     b.HasOne("ASR.Models.ApplicationUser", "Staff")
                         .WithMany()
-                        .HasForeignKey("StaffID");
+                        .HasForeignKey("StaffID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ASR.Models.ApplicationUser", "Student")
                         .WithMany()
