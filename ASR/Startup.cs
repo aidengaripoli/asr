@@ -39,8 +39,16 @@ namespace ASR
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ASRContextConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ASRContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<ASRContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
