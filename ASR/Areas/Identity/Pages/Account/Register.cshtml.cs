@@ -81,17 +81,17 @@ namespace ASR.Areas.Identity.Pages.Account
                 var user = new ApplicationUser { Name = Input.Name, UserName = Input.Email, Email = Input.Email, SchoolID = id };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
-                var role = user.UserName.StartsWith('e')
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+
+                    var role = user.UserName.StartsWith('e')
                     ? Constants.StaffRole
                     : user.UserName.StartsWith('s')
                     ? Constants.StudentRole
                     : throw new Exception();
 
-                await _userManager.AddToRoleAsync(user, role);
-
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, role);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
