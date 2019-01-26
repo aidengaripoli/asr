@@ -1,14 +1,16 @@
-﻿@model IEnumerable<ASR.Models.Slot>
+﻿@using ASR.Data
+@model IEnumerable<ASR.Models.Slot>
 
 @{
     ViewData["Title"] = "Slot";
 }
 
-<h2>Slot</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole(Constants.StaffRole))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -28,32 +30,48 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var slot in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StartTime)
+                    @Html.DisplayFor(modelItem => slot.StartTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Staff.SchoolID)
+                    @Html.DisplayFor(modelItem => slot.Staff.SchoolID)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Student.SchoolID)
+                    @Html.DisplayFor(modelItem => slot.Student.SchoolID)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.RoomID)
+                    @Html.DisplayFor(modelItem => slot.RoomID)
                 </td>
                 <td>
-                    <form asp-action="Delete">
-                        <input name="roomID" value="@item.RoomID" type="hidden" />
-                        <input name="startTime" value="@item.StartTime" type="hidden" />
-                        <input type="submit" value="Delete" class="btn btn-default" />
-                    </form>
-                    <form asp-action="Edit">
-                        <input name="roomID" value="@item.RoomID" type="hidden" />
-                        <input name="startTime" value="@item.StartTime" type="hidden" />
-                        <input type="submit" value="Book" class="btn btn-default" />
-                    </form>
+                    @* check slot is not booked and is created by current user *@
+                    @if (User.IsInRole(Constants.StaffRole) && (slot.StudentID == null) && (slot.Staff.Email == User.Identity.Name))
+                    {
+                        <form asp-action="Delete">
+                            <input name="roomID" value="@slot.RoomID" type="hidden" />
+                            <input name="startTime" value="@slot.StartTime" type="hidden" />
+                            <input type="submit" value="Delete" class="btn btn-default" />
+                        </form>
+                    }
+                    @* check slot is not booked or booked by current user *@
+                    @if (User.IsInRole(Constants.StudentRole) && (slot.StudentID == null || slot.Student.Email == User.Identity.Name))
+                    {
+                        <form asp-action="Book">
+                            <input name="roomID" value="@slot.RoomID" type="hidden" />
+                            <input name="startTime" value="@slot.StartTime" type="hidden" />
+                            @if (slot.StudentID == null)
+                            {
+                                <input type="submit" value="Book" class="btn btn-default" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Cancel" class="btn btn-default" />
+                            }
+
+                        </form>
+                    }
                 </td>
         </tr>
         }

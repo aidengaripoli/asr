@@ -5,15 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            <th></th>
+            <th>Room</th>
         </tr>
     </thead>
     <tbody>
@@ -21,9 +16,6 @@
         <tr>
             <td>
                 @item.RoomID
-                <a asp-action="Edit" asp-route-id="@item.RoomID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RoomID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RoomID">Delete</a>
             </td>
         </tr>
 }

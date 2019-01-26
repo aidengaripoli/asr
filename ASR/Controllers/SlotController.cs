@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ASR.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using ASR.Data;
 
 namespace ASR.Controllers
 {
@@ -23,18 +25,12 @@ namespace ASR.Controllers
         // GET: Staff
         public async Task<IActionResult> Index()
         {
-            var slots = await _context.Slot.Include(s => s.Staff).ToListAsync();
+            var slots = await _context.Slot.Include(s => s.Staff).Include(s => s.Student).ToListAsync();
             return View(slots);
         }
 
-        // GET: Slot/Details/5
-        public async Task<IActionResult> Details(string room, DateTime start)
-        {
-            var slot = _context.Slot.FirstOrDefault(s => s.RoomID == room && s.StartTime == start);
-            return View();
-        }
-
         // GET: Slot/Create
+        [Authorize(Roles = Constants.StaffRole)]
         public IActionResult Create()
         {
             return View();
@@ -43,6 +39,7 @@ namespace ASR.Controllers
         // POST: Slot/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Constants.StaffRole)]
         public async Task<IActionResult> Create(Slot slot)
         {
 
@@ -65,7 +62,8 @@ namespace ASR.Controllers
         // POST: Slot/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string roomID, DateTime startTime)
+        [Authorize(Roles = Constants.StudentRole)]
+        public async Task<IActionResult> Book(string roomID, DateTime startTime)
         {
             var slot = _context.Slot.FirstOrDefault(s => s.RoomID == roomID && s.StartTime == startTime);
 
@@ -74,6 +72,7 @@ namespace ASR.Controllers
                 ApplicationUser currentUser = _context.ApplicationUser
                                                 .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
                 slot.StudentID = currentUser.Id;
+
             }
             else
             {
@@ -89,6 +88,7 @@ namespace ASR.Controllers
         // POST: Slot/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Constants.StaffRole)]
         public async Task<IActionResult> Delete(string roomID, DateTime startTime)
         {
             var slot = _context.Slot.FirstOrDefault(s => s.RoomID == roomID && s.StartTime == startTime);

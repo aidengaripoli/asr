@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASR.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using ASR.Data;
 
 namespace ASR.Controllers
 {
+    [Authorize(Roles = Constants.StaffRole)]
     public class StaffController : Controller
     {
         private readonly ASRContext _context;

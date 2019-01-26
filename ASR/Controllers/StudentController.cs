@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASR.Models;
+using ASR.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASR.Controllers
 {
+    [Authorize(Roles = Constants.StudentRole)]
     public class StudentController : Controller
     {
         private readonly ASRContext _context;
