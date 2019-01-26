@@ -1,0 +1,53 @@
+﻿@using ASR.Data
+@model IEnumerable<ASR.Models.Slot>
+
+@{
+    ViewData["Title"] = "Availability";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Staff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomID)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var slot in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => slot.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => slot.Staff.SchoolID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => slot.RoomID)
+            </td>
+            <td>
+                <form asp-action="Book">
+                    <input name="roomID" value="@slot.RoomID" type="hidden" />
+                    <input name="startTime" value="@slot.StartTime" type="hidden" />
+                    @if (slot.StudentID == null)
+                    {
+                        <input type="submit" value="Book" class="btn btn-default" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Cancel" class="btn btn-default" />
+                    }
+
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

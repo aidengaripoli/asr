@@ -97,5 +97,18 @@ namespace ASR.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        [Authorize(Roles = Constants.StudentRole)]
+        public async Task<IActionResult> Availability(DateTime date,string staffID)
+        {
+            var availableSlots = _context.Slot.Where(x => x.Staff.SchoolID == staffID)
+                .Where(x => x.StartTime.Date == date.Date)
+                .Where(x => x.StudentID == null)
+                .Include(s => s.Staff);
+                
+
+            return View(await availableSlots.ToListAsync());
+        }
     }
 }

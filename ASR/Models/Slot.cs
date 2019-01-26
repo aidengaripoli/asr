@@ -9,8 +9,9 @@ namespace ASR.Models
 {
     public class Slot
     {
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        
+        [DisplayFormat(DataFormatString = "{0:h tt  dddd dd MMMM yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Start Time")]
         [Required]
         public DateTime StartTime { get; set; }

@@ -1,8 +1,24 @@
-﻿@model IEnumerable<ASR.Models.Room>
+﻿@using ASR.Data
+@model IEnumerable<ASR.Models.Room>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (User.IsInRole(Constants.StaffRole))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Availability">
+                @Html.TextBox("date", DateTime.Now, new { type = "date" })
+
+                <div class="form-group">
+                    <input type="submit" value="Check Availability" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
 }
 
 <table class="table">
@@ -21,3 +37,7 @@
 }
     </tbody>
 </table>
+
+
+
+
