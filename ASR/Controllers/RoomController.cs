@@ -23,16 +23,25 @@ namespace ASR.Controllers
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Room.ToListAsync());
+            var startDate = DateTime.Now;
+            var startTime = new TimeSpan(9, 0, 0);
+            startDate = startDate.Date + startTime;
+
+            return View(new RoomViewModel
+            {
+                Rooms = await _context.Room.ToListAsync(),
+                StartTime = startDate
+            });
+
+            //return View(await _context.Room.ToListAsync());
         }
 
+        // GET: Room/Availability
         [Authorize(Roles = Constants.StaffRole)]
-        public async Task<IActionResult> Availability(DateTime date)
+        public async Task<IActionResult> Availability(RoomViewModel viewModel)
         {
-
-            var slotsOnDate =  _context.Slot.Where(s => s.StartTime.Date == date.Date);
-
-
+            var slotsOnDate =  _context.Slot.Where(s => s.StartTime == viewModel.StartTime);
+            
             var availableRooms = from r in _context.Room
                         join s in slotsOnDate on r.RoomID equals s.RoomID into x
                         from p in x.DefaultIfEmpty()

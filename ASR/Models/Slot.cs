@@ -6,14 +6,14 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASR.Models
-{
+{  
     public class Slot
-    {
-        
-        [DisplayFormat(DataFormatString = "{0:h tt  dddd dd MMMM yyyy}", ApplyFormatInEditMode = true)]
+     {
+        [Required]
+        [DisplayFormat(DataFormatString = "{0:h tt  dddd dd MMMM yyyy}",
+            ApplyFormatInEditMode = true)]
         [DataType(DataType.DateTime)]
         [Display(Name = "Start Time")]
-        [Required]
         public DateTime StartTime { get; set; }
 
         [ForeignKey("Id")]
@@ -29,6 +29,5 @@ namespace ASR.Models
         [Display(Name = "Room")]
         public string RoomID { get; set; }
         public virtual Room Room { get; set; }
-
     }
 }

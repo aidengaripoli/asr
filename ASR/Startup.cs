@@ -44,7 +44,6 @@ namespace ASR
                 .AddEntityFrameworkStores<ASRContext>()
                 .AddDefaultTokenProviders();
 
-
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
                 googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];

@@ -8,13 +8,12 @@ using ASR.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using ASR.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ASR.Controllers
 {
     public class SlotController : Controller
     {
-        // GET: Slot
-
         private readonly ASRContext _context;
 
         public SlotController(ASRContext context)
@@ -22,18 +21,35 @@ namespace ASR.Controllers
             _context = context;
         }
 
-        // GET: Staff
+        // GET: Slot
         public async Task<IActionResult> Index()
         {
-            var slots = await _context.Slot.Include(s => s.Staff).Include(s => s.Student).ToListAsync();
-            return View(slots);
+            var staff = _context.ApplicationUser.Where(x => x.SchoolID.StartsWith('e'));
+
+            var slots = _context.Slot.Select(x => x).Include(x => x.Student).Include(x => x.Staff);
+
+            var startDate = DateTime.Now;
+            var startTime = new TimeSpan(9, 0, 0);
+            startDate = startDate.Date + startTime;
+
+            return View(new SlotStaffViewModel
+            {
+                Slots = await slots.ToListAsync(),
+                Staff = new SelectList(await staff.ToListAsync(), "SchoolID", "SchoolID"),
+                StartTime = startDate
+            });
         }
 
         // GET: Slot/Create
         [Authorize(Roles = Constants.StaffRole)]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var rooms = _context.Room.Select(x => x.RoomID);
+
+            return View(new SlotRoomsViewModel
+            {
+                Rooms = new SelectList(await rooms.ToListAsync())
+            });
         }
 
         // POST: Slot/Create
@@ -44,10 +60,9 @@ namespace ASR.Controllers
         {
 
             ApplicationUser currentUser = _context.ApplicationUser
-                                                  .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
+                .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
             slot.StaffID = currentUser.Id;
-
 
             if (ModelState.IsValid)
             {
@@ -56,6 +71,7 @@ namespace ASR.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
             return View(slot);
         }
 
@@ -67,19 +83,20 @@ namespace ASR.Controllers
         {
             var slot = _context.Slot.FirstOrDefault(s => s.RoomID == roomID && s.StartTime == startTime);
 
+            ApplicationUser currentUser = _context.ApplicationUser
+                    .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
+
             if (slot.StudentID == null)
             {
-                ApplicationUser currentUser = _context.ApplicationUser
-                                                .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
                 slot.StudentID = currentUser.Id;
-
             }
-            else
+            else if (slot.StudentID == currentUser.Id)
             {
                 slot.StudentID = null;
             }
 
             _context.Update(slot);
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
@@ -92,21 +109,27 @@ namespace ASR.Controllers
         public async Task<IActionResult> Delete(string roomID, DateTime startTime)
         {
             var slot = _context.Slot.FirstOrDefault(s => s.RoomID == roomID && s.StartTime == startTime);
+
+            if (slot.StudentID != null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             _context.Remove(slot);
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-
+        // GET: Slot/Availability
         [Authorize(Roles = Constants.StudentRole)]
-        public async Task<IActionResult> Availability(DateTime date,string staffID)
+        public async Task<IActionResult> Availability(Slot slot, string staffID)
         {
             var availableSlots = _context.Slot.Where(x => x.Staff.SchoolID == staffID)
-                .Where(x => x.StartTime.Date == date.Date)
+                .Where(x => x.StartTime == slot.StartTime)
                 .Where(x => x.StudentID == null)
                 .Include(s => s.Staff);
-                
 
             return View(await availableSlots.ToListAsync());
         }

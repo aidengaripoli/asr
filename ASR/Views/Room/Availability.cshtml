@@ -1,28 +1,36 @@
-﻿@model IEnumerable<ASR.Models.Room>
+﻿@model IEnumerable<Room>
 
 @{
     ViewData["Title"] = "Availability";
 }
 
-<h2>Availability</h2>
+<div class="container">
+    <h3 class="mt-3 mb-3">
+        Room Availability
+    </h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Room</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoomID)
-            </td>
-            <td>
-                Book
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <hr />
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Room</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomID)
+                    </td>
+                    <td>
+                        @* TODO: pass date to create method to autopopulate the date. *@
+                        <a asp-controller="Slot" asp-action="Create" class="btn btn-primary">Create Slot</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
