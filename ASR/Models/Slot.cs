@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,10 +18,12 @@ namespace ASR.Models
         public DateTime StartTime { get; set; }
 
         [ForeignKey("Id")]
+        [JsonIgnore]
         public string StaffID { get; set; }
         public virtual ApplicationUser Staff { get; set; }
 
         [ForeignKey("Id")]
+        [JsonIgnore]
         public string StudentID { get; set; }
         [Display(Name = "Booked By")]
         public virtual ApplicationUser Student { get; set; }
@@ -28,6 +31,7 @@ namespace ASR.Models
         [Required]
         [Display(Name = "Room")]
         public string RoomID { get; set; }
+        [JsonIgnore]
         public virtual Room Room { get; set; }
 
     }

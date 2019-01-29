@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using ASR.Data;
 using ASR.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Net.Http;
-using System.Net;
 
 namespace ASR.API.Controllers
 {
@@ -27,8 +25,8 @@ namespace ASR.API.Controllers
         }
 
         // GET: api/User/<role>
-        [HttpGet("{role}", Name = "GetUsers")]
-        [ProducesResponseType(400)]
+        [HttpGet("{role}")]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get(string role)
         {
             if (role.ToLower() == Constants.StaffRole.ToLower())
@@ -41,7 +39,7 @@ namespace ASR.API.Controllers
                 var students = await _userManager.GetUsersInRoleAsync(Constants.StudentRole);
                 return students.ToList();
             }
-            return BadRequest();
+            return NotFound();
 
         }
     }

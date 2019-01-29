@@ -4,43 +4,102 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ASR.Models;
+using System.Globalization;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASR.API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class SlotController : ControllerBase
     {
+        private readonly ASRContext _context;
+
+        public SlotController(ASRContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/Slot
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<Slot>>> Get(string staffID, string studentID)
         {
-            return new string[] { "value1", "value2" };
+            var slots = _context.Slot.Include(s => s.Staff).AsQueryable();
+            if (staffID != null)
+            {
+                slots = slots.Where(s => s.Staff.SchoolID == staffID);
+            }
+            if (studentID != null)
+            {
+                slots = slots.Where(s => s.Student.SchoolID == studentID);
+            }
+
+            return await slots.ToListAsync();
         }
 
-        // GET: api/Slot/5
-        [HttpGet("{id}", Name = "GetSlot")]
-        public string Get(int id)
+
+        // GET: api/Slot/<room-id>/<iso-start-time>
+        [HttpGet("{roomID}/{startTime}")]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Slot>> GetSlot(string roomID, DateTime startTime)
         {
-            return "value";
+            var slot = await _context.Slot.Include(s => s.Staff).Include(s => s.Student).FirstOrDefaultAsync( s => s.StartTime == startTime && s.RoomID == roomID);
+            if (slot == null)
+            {
+                return NotFound();
+            }
+            return slot;
         }
 
-        // POST: api/Slot
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        // PUT: api/Slot/<room-id>/<iso-start-time>
+        [HttpPut("{roomID}/{startTime}")]
+        [ProducesResponseType(400), ProducesResponseType(404)]
+        public async Task<ActionResult<Slot>> PutSlotStudent(string roomID, DateTime startTime, [FromBody] string studentID)
         {
+            var slot = await _context.Slot.FirstOrDefaultAsync(s => s.RoomID == roomID && s.StartTime == startTime);
+            if (slot == null)
+            {
+                return NotFound();
+            }
+            if (String.IsNullOrEmpty(studentID))
+            {
+                slot.StudentID = null;
+            }
+            else
+            {
+                var student = await _context.Users.FirstOrDefaultAsync(u => u.SchoolID == studentID);
+                if (student == null)
+                {
+                    return BadRequest();
+                }
+                slot.StudentID = student.Id;
+            }
+            
+            _context.Entry(slot).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
-        // PUT: api/Slot/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // DELETE: api/Slot/<room-id>/<iso-start-time>
+        [HttpDelete("{roomID}/{startTime}")]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> Delete(string roomID, DateTime startTime)
         {
-        }
+            var slot = await _context.Slot.FirstOrDefaultAsync(s => s.StartTime == startTime && s.RoomID == roomID);
+            if (slot == null)
+            {
+                return NotFound();
+            }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            _context.Slot.Remove(slot);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
