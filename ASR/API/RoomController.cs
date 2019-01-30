@@ -32,11 +32,13 @@ namespace ASR.API.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Room>> GetRoom(string id)
         {
-            var room = await _context.Room.FirstOrDefaultAsync( r => r.RoomID == id);
+            var room = await _context.Room.FirstOrDefaultAsync(r => r.RoomID == id);
+
             if (room == null)
             {
                 return NotFound();
             }
+
             return room;
         }
 

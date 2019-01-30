@@ -44,12 +44,13 @@ namespace ASR
                 .AddEntityFrameworkStores<ASRContext>()
                 .AddDefaultTokenProviders();
 
-
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
                 googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
+
+            services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -73,6 +74,8 @@ namespace ASR
             //app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
 
             app.UseMvc(routes =>
             {
