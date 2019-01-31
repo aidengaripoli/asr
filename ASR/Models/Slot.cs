@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASR.Models
-{  
+{
     public class Slot
      {
         [Required]

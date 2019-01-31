@@ -53,22 +53,32 @@ namespace ASR.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = Constants.StaffRole)]
-        public async Task<IActionResult> Create(Slot slot)
+        public async Task<IActionResult> Create(SlotRoomsViewModel slotRoomsViewModel)
         {
             ApplicationUser currentUser = _context.ApplicationUser
                 .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
-            slot.StaffID = currentUser.Id;
+            var slot = slotRoomsViewModel.Slot;
 
             if (ModelState.IsValid)
             {
+                slot = new Slot
+                {
+                    StartTime = slotRoomsViewModel.StartTime,
+                    RoomID = slotRoomsViewModel.RoomID,
+                    StaffID = currentUser.Id,
+                };
+
                 _context.Add(slot);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(slot);
+            var rooms = _context.Room.Select(x => x.RoomID);
+            slotRoomsViewModel.Rooms = new SelectList(await rooms.ToListAsync());
+
+            return View(slotRoomsViewModel);
         }
 
         // POST: Slot/Edit/5

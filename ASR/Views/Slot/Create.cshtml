@@ -18,19 +18,11 @@
 
                 <div class="card-body">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
                         <div class="form-group">
                             <label asp-for="StartTime" class="control-label"></label>
-                            <input asp-for="StartTime" class="form-control" />
+                            <input asp-for="StartTime" class="form-control" step="3600" min="@Model.StartTime.ToString("yyyy-MM-ddThh:mm")" />
                             <span asp-validation-for="StartTime" class="text-danger"></span>
                         </div>
-
-                        @*<div class="form-group">
-                            <label asp-for="RoomID" class="control-label"></label>
-                            <input asp-for="RoomID" class="form-control" />
-                            <span asp-validation-for="RoomID" class="text-danger"></span>
-                        </div>*@
 
                         <div class="form-group">
                             <label asp-for="RoomID" class="control-label"></label>
@@ -38,16 +30,12 @@
                             <span asp-validation-for="RoomID" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group">
-                            <input type="submit" value="Create" class="btn btn-primary" />
-                        </div>
+                        <button type="submit" class="btn btn-primary">Create Slot</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    
 
     <hr />
 

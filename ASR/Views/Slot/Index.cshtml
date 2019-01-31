@@ -27,9 +27,7 @@
 
             <div class="form-group mr-2">
                 <label asp-for="StaffID" class="control-label mr-2"></label>
-                <select asp-for="StaffID" asp-items="Model.Staff" class="form-control">
-                    @*<option value="" selected disabled hidden>Staff ID</option>*@
-                </select>
+                <select asp-for="StaffID" asp-items="Model.Staff" class="form-control"></select>
                 <span asp-validation-for="StaffID" class="text-danger"></span>
             </div>
 

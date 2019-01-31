@@ -16,6 +16,7 @@ namespace ASR.Models
         public string RoomID { get; set; }
 
         [DataType(DataType.DateTime)]
+        [SchoolHours]
         [Display(Name = "Start Time")]
         public DateTime StartTime { get; set; }
     }
