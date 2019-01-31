@@ -9,10 +9,9 @@ namespace ASR.Models
 {
     public class SlotRoomsViewModel
     {
-        public Slot Slot { get; set; }
-
         public SelectList Rooms { get; set; }
 
+        [MaxBookingPerDay(2)]
         public string RoomID { get; set; }
 
         [DataType(DataType.DateTime)]

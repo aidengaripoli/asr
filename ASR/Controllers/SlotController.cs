@@ -58,11 +58,11 @@ namespace ASR.Controllers
             ApplicationUser currentUser = _context.ApplicationUser
                 .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
-            var slot = slotRoomsViewModel.Slot;
+            //var slot = slotRoomsViewModel.Slot;
 
             if (ModelState.IsValid)
             {
-                slot = new Slot
+                var slot = new Slot
                 {
                     StartTime = slotRoomsViewModel.StartTime,
                     RoomID = slotRoomsViewModel.RoomID,
@@ -92,7 +92,10 @@ namespace ASR.Controllers
             ApplicationUser currentUser = _context.ApplicationUser
                     .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
-            if (slot.StudentID == null)
+            var studentBookedMaxForDate = _context.Slot
+                .FirstOrDefault(x => x.StartTime.Date == startTime.Date && x.StudentID == currentUser.Id) != null;
+
+            if ((slot.StudentID == null) && (!studentBookedMaxForDate))
             {
                 slot.StudentID = currentUser.Id;
             }

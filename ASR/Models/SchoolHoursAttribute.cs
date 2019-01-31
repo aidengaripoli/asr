@@ -7,17 +7,17 @@ namespace ASR.Models
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            SlotRoomsViewModel slot = (SlotRoomsViewModel)validationContext.ObjectInstance;
+            var slotRoomsViewModel = (SlotRoomsViewModel)validationContext.ObjectInstance;
 
             TimeSpan start = new TimeSpan(9, 0, 0); // 9:00am
             TimeSpan end = new TimeSpan(13, 0, 0); // 1:00pm
 
-            if ((slot.StartTime.TimeOfDay < start) || (slot.StartTime.TimeOfDay > end))
+            if ((slotRoomsViewModel.StartTime.TimeOfDay < start) || (slotRoomsViewModel.StartTime.TimeOfDay > end))
             {
                 return new ValidationResult(GetSchoolHoursErrorMessage());
             }
 
-            if (slot.StartTime.TimeOfDay.Minutes != 0)
+            if (slotRoomsViewModel.StartTime.TimeOfDay.Minutes != 0)
             {
                 return new ValidationResult(GetOnHourErrorMessage());
             }
