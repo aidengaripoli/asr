@@ -28,15 +28,11 @@ namespace ASR.Controllers
 
             var slots = _context.Slot.Select(x => x).Include(x => x.Student).Include(x => x.Staff);
 
-            var startDate = DateTime.Now;
-            var startTime = new TimeSpan(9, 0, 0);
-            startDate = startDate.Date + startTime;
-
             return View(new SlotStaffViewModel
             {
                 Slots = await slots.ToListAsync(),
                 Staff = new SelectList(await staff.ToListAsync(), "SchoolID", "SchoolID"),
-                StartTime = startDate
+                StartTime = DateTime.Now.Date + new TimeSpan(9, 0, 0)
             });
         }
 
@@ -48,7 +44,8 @@ namespace ASR.Controllers
 
             return View(new SlotRoomsViewModel
             {
-                Rooms = new SelectList(await rooms.ToListAsync())
+                Rooms = new SelectList(await rooms.ToListAsync()),
+                StartTime = DateTime.Now.Date + new TimeSpan(9, 0, 0)
             });
         }
 
@@ -58,7 +55,6 @@ namespace ASR.Controllers
         [Authorize(Roles = Constants.StaffRole)]
         public async Task<IActionResult> Create(Slot slot)
         {
-
             ApplicationUser currentUser = _context.ApplicationUser
                 .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
@@ -132,6 +128,21 @@ namespace ASR.Controllers
                 .Include(s => s.Staff);
 
             return View(await availableSlots.ToListAsync());
+        }
+
+        // GET: Slot/Report
+        [Authorize(Roles = Constants.StaffRole)]
+        public async Task<IActionResult> Report()
+        {
+            ApplicationUser staff = _context.ApplicationUser
+                    .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
+
+            var slots = _context.Slot.Where(x => x.StaffID == staff.Id)
+                .Where(x => x.StudentID != null)
+                .OrderBy(x => x.StartTime)
+                .Include(x => x.Student);
+
+            return View(await slots.ToListAsync());
         }
     }
 }

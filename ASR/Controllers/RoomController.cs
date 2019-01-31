@@ -23,17 +23,11 @@ namespace ASR.Controllers
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
-            var startDate = DateTime.Now;
-            var startTime = new TimeSpan(9, 0, 0);
-            startDate = startDate.Date + startTime;
-
             return View(new RoomViewModel
             {
                 Rooms = await _context.Room.ToListAsync(),
-                StartTime = startDate
+                StartTime = DateTime.Now.Date + new TimeSpan(9, 0, 0)
             });
-
-            //return View(await _context.Room.ToListAsync());
         }
 
         // GET: Room/Availability
