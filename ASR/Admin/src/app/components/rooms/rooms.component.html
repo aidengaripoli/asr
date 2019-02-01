@@ -1,9 +1,16 @@
 <h2>Rooms</h2>
 
-<ul>
-  <li *ngFor="let room of rooms">
-    <a routerLink="/rooms/{{room.roomID}}">
-      {{room.roomID}}
-    </a>
-  </li>
-</ul>
+<table class="table">
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let room of rooms" >
+      <td>{{ room.roomID }}</td>
+      <td><input type="submit" value="Delete" class="btn btn-danger" /></td>
+    </tr>
+  </tbody>
+</table>

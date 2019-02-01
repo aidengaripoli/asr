@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Slot } from '../../slot';
-import { SlotService } from '../../services/slot.service';
+import { SlotService, Slot } from '../../services/slot.service';
+import { UserService, User } from '../../services/user.service';
+import { filterByStaffOrStudentID } from '../../pipes/custom.pipes';
 
 @Component({
   selector: 'app-slots',
@@ -10,11 +11,15 @@ import { SlotService } from '../../services/slot.service';
 })
 export class SlotsComponent implements OnInit {
   slots: Slot[];
+  students: User[];
+  staffs: User[];
+  staffID:string = '';
 
-  constructor(private slotService: SlotService) { }
+  constructor(private slotService: SlotService,private userService: UserService) { }
 
   ngOnInit() {
     this.getSlots();
+    this.getUsers();
   }
 
   getSlots(): void {
@@ -23,4 +28,15 @@ export class SlotsComponent implements OnInit {
       );
   }
 
+  getUsers(): void {
+    this.userService.getStudents()
+      .subscribe(students => this.students = students
+      );
+    this.userService.getStaffs()
+      .subscribe(staffs => this.staffs = staffs
+      );
+  }
+
 }
+
+

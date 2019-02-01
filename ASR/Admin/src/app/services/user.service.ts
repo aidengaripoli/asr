@@ -9,22 +9,32 @@ import { MessageService } from './message.service';
 @Injectable({
   providedIn: 'root'
 })
-export class SlotService {
-  private slotsURL = 'https://localhost:44300/api/slot'
+export class UserService {
+  private usersURL = 'https://localhost:44300/api/user/'
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService
   ) { }
 
-  getSlots(): Observable<Slot[]> {
-    return this.http.get<Slot[]>(this.slotsURL)
+  getStudents(): Observable<User[]> {
+    return this.http.get<User[]>(this.usersURL + 'student')
       .pipe(
-        tap(_ => this.log('fetched slots')),
-        catchError(this.handleError('=', []))
+        tap(_ => this.log('fetched rooms')),
+        catchError(this.handleError('getStudents', []))
       );
   }
 
+  getStaffs(): Observable<User[]> {
+    return this.http.get<User[]>(this.usersURL + 'staff')
+      .pipe(
+        tap(_ => this.log('fetched rooms')),
+        catchError(this.handleError('getStaffs', []))
+      );
+  }
+
+
+  
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -42,16 +52,13 @@ export class SlotService {
     };
   }
 
-  /** Log a SlotService message with the MessageService */
+  /** Log a RoomService message with the MessageService */
   private log(message: string) {
-    this.messageService.add(`SlotService: ${message}`);
+    this.messageService.add(`RoomService: ${message}`);
   }
-
 }
 
-export class Slot {
-  roomID: string
-  startTime: Date
-  staff: Object
-  student: Object
+export class User {
+  name: string
+  schoolID: string
 }
