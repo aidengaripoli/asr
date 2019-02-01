@@ -1,5 +1,10 @@
 <h2>Rooms</h2>
 
+<form class="form-row p-3" (ngSubmit)="createRoom()">
+  <input type="text" class="form-control col-md-3 m-2" placeholder="Create new room" [formControl]="roomForm">
+  <input type="submit" class="btn btn-primary m-2" value="Create">
+</form> 
+
 <table class="table">
   <thead>
       <tr>

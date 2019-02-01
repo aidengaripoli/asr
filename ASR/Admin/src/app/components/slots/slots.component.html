@@ -30,13 +30,14 @@
       <td>{{ slot.startTime | date:"EE h a, dd MMMM yy" }}</td>
       <td>{{ slot.staff.schoolID }}</td>
       <td>
-          <select class='custom-select'>
-              <option selected>{{ slot.student?.schoolID }}</option>
+          <select (change)="updateSlotStudent(slot,$event.target.value)" class='custom-select'>
+              <option selected hidden>{{ slot.student?.schoolID }}</option>
+              <option value=''>Cancel Booking</option>
               <option *ngFor="let student of students">{{ student.schoolID }}</option>
           </select>
       </td>
       <td>{{ slot.roomID }}</td>
-      <td><input type="submit" value="Delete" class="btn btn-danger" /></td>
+      <td><button (click)="deleteSlot(slot)" class="btn btn-danger" >Delete</button></td>
     </tr>
   </tbody>
 </table>

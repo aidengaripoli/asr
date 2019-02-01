@@ -10,7 +10,7 @@ import { MessageService } from './message.service';
   providedIn: 'root'
 })
 export class SlotService {
-  private slotsURL = 'https://localhost:44300/api/slot'
+  private slotsURL = 'https://localhost:44300/api/slot/'
 
   constructor(
     private http: HttpClient,
@@ -24,6 +24,26 @@ export class SlotService {
         catchError(this.handleError('=', []))
       );
   }
+
+  deleteSlot(slot: Slot) {
+    return this.http.delete(this.slotsURL + slot.roomID + '/' + slot.startTime)
+      .pipe(
+        tap(_ => this.log('deleted slot')),
+        catchError(this.handleError('=', []))
+      );
+  }
+
+  updateSlotStudent(slot: Slot, student: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type':  'application/json'})
+    };
+    return this.http.put(this.slotsURL + slot.roomID + '/' + slot.startTime, JSON.stringify(student), httpOptions)
+      .pipe(
+        tap(_ => this.log('updated slot')),
+        catchError(this.handleError('=', []))
+      );
+  }
+
 
   /**
    * Handle Http operation that failed.

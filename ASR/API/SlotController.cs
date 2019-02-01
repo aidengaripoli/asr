@@ -8,12 +8,14 @@ using ASR.Models;
 using System.Globalization;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
 
 namespace ASR.API.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("CorsPolicy")]
     public class SlotController : ControllerBase
     {
         private readonly ASRContext _context;

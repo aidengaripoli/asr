@@ -28,6 +28,16 @@ export class SlotsComponent implements OnInit {
       );
   }
 
+  deleteSlot(slot: Slot): void {
+    this.slotService.deleteSlot(slot)
+      .subscribe((data) =>this.ngOnInit());
+  }
+
+  updateSlotStudent(slot: Slot, student: string): void {
+    this.slotService.updateSlotStudent(slot,student)
+      .subscribe((data) =>this.ngOnInit());
+  }
+
   getUsers(): void {
     this.userService.getStudents()
       .subscribe(students => this.students = students

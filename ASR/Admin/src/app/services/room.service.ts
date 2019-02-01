@@ -25,13 +25,15 @@ export class RoomService {
       );
   }
 
-  getRoom(id: string): Observable<Room> {
-    const url = `${this.roomsURL}/${id}`;
-
-    return this.http.get<Room>(url).pipe(
-      tap(_ => this.log(`fetched room id=${id}`)),
-      catchError(this.handleError<Room>(`getRoom id=${id}`))
-    );
+  createRoom(room: Room) {
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type':  'application/json'})
+    };
+    return this.http.post(this.roomsURL, JSON.stringify(room), httpOptions)
+      .pipe(
+        tap(_ => this.log('created room')),
+        catchError(this.handleError('createRoom', []))
+      );
   }
 
   /**
@@ -60,4 +62,8 @@ export class RoomService {
 
 export class Room {
   roomId: string
+
+  constructor(roomId: string) {
+    this.roomId = roomId;
+  }
 }

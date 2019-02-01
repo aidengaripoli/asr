@@ -20,7 +20,7 @@ export class UserService {
   getStudents(): Observable<User[]> {
     return this.http.get<User[]>(this.usersURL + 'student')
       .pipe(
-        tap(_ => this.log('fetched rooms')),
+        tap(_ => this.log('fetched students')),
         catchError(this.handleError('getStudents', []))
       );
   }
@@ -28,7 +28,7 @@ export class UserService {
   getStaffs(): Observable<User[]> {
     return this.http.get<User[]>(this.usersURL + 'staff')
       .pipe(
-        tap(_ => this.log('fetched rooms')),
+        tap(_ => this.log('fetched staff')),
         catchError(this.handleError('getStaffs', []))
       );
   }
