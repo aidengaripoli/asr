@@ -1,0 +1,22 @@
+<h2>Slots</h2>
+
+<table class="table">
+  <thead>
+      <tr>
+          <th>Start Time</th>
+          <th>Staff</th>
+          <th>Booked By</th>
+          <th>Room</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let slot of slots" >
+      <td>{{ slot.startTime }}</td>
+      <td>{{ slot.staff.schoolID }}</td>
+      <td>{{ slot.student?.schoolID }}</td>
+      <td>{{ slot.roomID }}</td>
+      <td><input type="submit" value="Delete" class="btn btn-danger" /></td>
+    </tr>
+  </tbody>
+</table>

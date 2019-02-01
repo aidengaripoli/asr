@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Room } from '../room';
-import { RoomService } from '../room.service';
+import { Room } from '../../room';
+import { RoomService } from '../../services/room.service';
 
 @Component({
   selector: 'app-room-detail',

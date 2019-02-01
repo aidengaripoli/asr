@@ -27,7 +27,7 @@ namespace ASR.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Slot>>> Get(string staffID, string studentID)
         {
-            var slots = _context.Slot.Include(s => s.Staff).AsQueryable();
+            var slots = _context.Slot.Include(s => s.Staff).Include(s => s.Student).AsQueryable();
             if (staffID != null)
             {
                 slots = slots.Where(s => s.Staff.SchoolID == staffID);
