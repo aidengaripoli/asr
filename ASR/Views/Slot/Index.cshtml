@@ -20,7 +20,7 @@
 
             <div class="form-group mr-2">
                 <label asp-for="StartTime" class="control-label mr-2"></label>
-                <input asp-for="StartTime" class="form-control" step="3600" min="@Model.StartTime.ToString("yyyy-MM-ddThh:mm")" />
+                <input asp-for="StartTime" class="form-control" />
                 <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
 

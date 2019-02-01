@@ -25,12 +25,26 @@
             </tr>
         </thead>
         <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="3" class="text-center">You do not have any slots.</td>
+                </tr>
+            }
+
             @foreach (var slot in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => slot.StartTime)</td>
-                    <td>@Html.DisplayFor(modelItem => slot.Student.SchoolID)</td>
-                    <td>@Html.DisplayFor(modelItem => slot.RoomID)</td>
+                    <td class="align-middle text-center">@Html.DisplayFor(modelItem => slot.StartTime)</td>
+                    @if (slot.StudentID == null)
+                    {
+                        <td class="align-middle text-center">--</td>
+                    }
+                    else
+                    {
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => slot.Student.SchoolID)</td>
+                    }
+                    <td class="align-middle text-center">@Html.DisplayFor(modelItem => slot.RoomID)</td>
                 </tr>
             }
         </tbody>

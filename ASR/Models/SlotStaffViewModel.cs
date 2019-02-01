@@ -16,8 +16,8 @@ namespace ASR.Models
         [Required]
         public string StaffID { get; set; }
 
-        [DataType(DataType.DateTime)]
-        [Display(Name = "Start Time")]
+        [DataType(DataType.Date)]
+        [Display(Name = "Date")]
         public DateTime StartTime { get; set; }
     }
 }

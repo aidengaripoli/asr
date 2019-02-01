@@ -26,7 +26,10 @@ namespace ASR.Controllers
         {
             var staff = _context.ApplicationUser.Where(x => x.SchoolID.StartsWith('e'));
 
-            var slots = _context.Slot.Select(x => x).Include(x => x.Student).Include(x => x.Staff);
+            var slots = _context.Slot.Select(x => x)
+                .OrderBy(x => x.StartTime)
+                .Include(x => x.Student)
+                .Include(x => x.Staff);
 
             return View(new SlotStaffViewModel
             {
@@ -57,8 +60,6 @@ namespace ASR.Controllers
         {
             ApplicationUser currentUser = _context.ApplicationUser
                 .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
-
-            //var slot = slotRoomsViewModel.Slot;
 
             if (ModelState.IsValid)
             {
@@ -136,7 +137,7 @@ namespace ASR.Controllers
         public async Task<IActionResult> Availability(Slot slot, string staffID)
         {
             var availableSlots = _context.Slot.Where(x => x.Staff.SchoolID == staffID)
-                .Where(x => x.StartTime == slot.StartTime)
+                .Where(x => x.StartTime.Date == slot.StartTime.Date)
                 .Where(x => x.StudentID == null)
                 .Include(s => s.Staff);
 
@@ -151,7 +152,6 @@ namespace ASR.Controllers
                     .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
             var slots = _context.Slot.Where(x => x.StaffID == staff.Id)
-                .Where(x => x.StudentID != null)
                 .OrderBy(x => x.StartTime)
                 .Include(x => x.Student);
 

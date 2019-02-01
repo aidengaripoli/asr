@@ -23,7 +23,7 @@ namespace ASR.Models
                 .Where(x => x.RoomID == slotRoomsViewModel.RoomID && x.StartTime.Date == slotRoomsViewModel.StartTime.Date)
                 .Count();
 
-            if (numSlotsForRoomOnDate == 2)
+            if (numSlotsForRoomOnDate >= _maxBookingsPerDay)
             {
                 return new ValidationResult(GetErrorMessage());
             }
