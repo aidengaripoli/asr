@@ -10,7 +10,7 @@ import { MessageService } from './message.service';
   providedIn: 'root'
 })
 export class RoomService {
-  private roomsURL = 'https://localhost:44300/api/room'
+  private roomsURL = 'https://localhost:44300/api/room/'
 
   constructor(
     private http: HttpClient,
@@ -22,6 +22,15 @@ export class RoomService {
       .pipe(
         tap(_ => this.log('fetched rooms')),
         catchError(this.handleError('getRooms', []))
+      );
+  }
+
+  deleteRoom(room: Room) {
+    
+    return this.http.delete(this.roomsURL + room.roomID)
+      .pipe(
+        tap(_ => this.log('deleted room')),
+        catchError(this.handleError('=', []))
       );
   }
 
@@ -61,9 +70,9 @@ export class RoomService {
 
 
 export class Room {
-  roomId: string
+  roomID: string
 
-  constructor(roomId: string) {
-    this.roomId = roomId;
+  constructor(roomID: string) {
+    this.roomID = roomID;
   }
 }

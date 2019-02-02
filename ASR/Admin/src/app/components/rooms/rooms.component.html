@@ -1,9 +1,19 @@
 <h2>Rooms</h2>
 
-<form class="form-row p-3" (ngSubmit)="createRoom()">
-  <input type="text" class="form-control col-md-3 m-2" placeholder="Create new room" [formControl]="roomForm">
-  <input type="submit" class="btn btn-primary m-2" value="Create">
-</form> 
+<div class="form-group">
+  <form class="form-row p-3" (ngSubmit)="createRoom()">
+    <div class="col-md-3 m-2">
+      <input type="text" class="form-control" [class.has-error]="roomForm.errors?.maxlength" placeholder="Create new room" [formControl]="roomForm">
+      <div  *ngIf="roomForm.errors?.maxlength" >
+        <small class="text-danger">Must be less than 20 characters long.</small>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <input type="submit" class="btn btn-primary m-2" value="Create">
+    </div>
+  </form> 
+</div>
+
 
 <table class="table">
   <thead>
@@ -15,7 +25,7 @@
   <tbody>
     <tr *ngFor="let room of rooms" >
       <td>{{ room.roomID }}</td>
-      <td><input type="submit" value="Delete" class="btn btn-danger" /></td>
+      <td><button class="btn btn-danger" (click)="deleteRoom(room)">Delete</button></td>
     </tr>
   </tbody>
 </table>
