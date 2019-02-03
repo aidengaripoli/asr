@@ -15,7 +15,10 @@ export class SlotsComponent implements OnInit {
   staffs: User[];
   staffID: string = '';
 
-  constructor(private slotService: SlotService,private userService: UserService) { }
+  constructor(
+    private slotService: SlotService,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
     this.getSlots();
@@ -24,8 +27,7 @@ export class SlotsComponent implements OnInit {
 
   getSlots(): void {
     this.slotService.getSlots()
-      .subscribe(slots => this.slots = slots
-      );
+      .subscribe(slots => this.slots = slots);
   }
 
   deleteSlot(slot: Slot): void {
@@ -46,11 +48,10 @@ export class SlotsComponent implements OnInit {
 
   getUsers(): void {
     this.userService.getStudents()
-      .subscribe(students => this.students = students
-      );
+      .subscribe(students => this.students = students);
+
     this.userService.getStaffs()
-      .subscribe(staffs => this.staffs = staffs
-      );
+      .subscribe(staffs => this.staffs = staffs);
   }
 
 }

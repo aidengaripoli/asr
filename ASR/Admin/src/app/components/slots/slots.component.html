@@ -20,7 +20,7 @@
 
 <hr />
 
-<table class="table">
+<table class="table table-bordered table-hover">
   <thead>
       <tr>
           <th>Start Time</th>
@@ -33,17 +33,17 @@
 
   <tbody>
     <tr *ngFor="let slot of slots | filterByStaffOrStudentID : staffID | filterByStaffOrStudentID : studentID" >
-      <td>{{ slot.startTime | date:"EE h a, dd MMMM yy" }}</td>
-      <td>{{ slot.staff.schoolID }}</td>
-      <td>
+      <td class="align-middle text-center">{{ slot.startTime | date:"EE h a, dd MMMM yy" }}</td>
+      <td class="align-middle text-center">{{ slot.staff.schoolID }}</td>
+      <td class="align-middle text-center">
           <select (change)="updateSlotStudent(slot,$event.target.value)" class='custom-select'>
               <option selected hidden>{{ slot.student?.schoolID }}</option>
               <option value=''>Cancel Booking</option>
               <option *ngFor="let student of students">{{ student.schoolID }}</option>
           </select>
       </td>
-      <td>{{ slot.roomID }}</td>
-      <td><button (click)="deleteSlot(slot)" class="btn btn-danger" >Delete</button></td>
+      <td class="align-middle text-center">{{ slot.roomID }}</td>
+      <td class="align-middle text-center"><button (click)="deleteSlot(slot)" class="btn btn-danger" >Delete</button></td>
     </tr>
   </tbody>
 </table>
