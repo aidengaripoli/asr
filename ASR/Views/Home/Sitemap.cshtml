@@ -1,0 +1,38 @@
+﻿@using ASR.Data
+
+@{
+    ViewData["Title"] = "Sitemap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-center mt-3 mb-3">
+        <h1 class="display-3">Sitemap</h1>
+    </div>
+
+    <div>
+        <ul>
+            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-controller="Home" asp-action="FAQ">FAQ</a></li>
+            <li><a asp-controller="Home" asp-action="Sitemap">Sitemap</a></li>
+            <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+            <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li><a asp-controller="Slot" asp-action="Index">Slots</a></li>
+                <li><a asp-controller="Room" asp-action="Index">Rooms</a></li>
+            }
+
+            @if ((User.Identity.IsAuthenticated) && (User.IsInRole(Constants.StudentRole)))
+            {
+                <li><a asp-controller="Student" asp-action="Index">Students</a></li>
+            }
+
+            @if ((User.Identity.IsAuthenticated) && (User.IsInRole(Constants.StaffRole)))
+            {
+                <li><a asp-controller="Staff" asp-action="Index">Staff</a></li>
+            }
+        </ul>
+    </div>
+</div>

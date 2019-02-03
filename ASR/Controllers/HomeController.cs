@@ -15,17 +15,13 @@ namespace ASR.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult FAQ()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Sitemap()
         {
-            ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
