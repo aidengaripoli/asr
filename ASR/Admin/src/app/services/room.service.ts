@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
+import { Room } from '../room';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,10 @@ export class RoomService {
   }
 
   deleteRoom(room: Room) {
-    
     return this.http.delete(this.roomsURL + room.roomID)
       .pipe(
         tap(_ => this.log('deleted room')),
-        catchError(this.handleError('=', []))
+        catchError(this.handleError('deleteRoom', []))
       );
   }
 
@@ -38,6 +38,7 @@ export class RoomService {
     const httpOptions = {
       headers: new HttpHeaders({'Content-Type':  'application/json'})
     };
+
     return this.http.post(this.roomsURL, JSON.stringify(room), httpOptions)
       .pipe(
         tap(_ => this.log('created room')),
@@ -65,14 +66,5 @@ export class RoomService {
   /** Log a RoomService message with the MessageService */
   private log(message: string) {
     this.messageService.add(`RoomService: ${message}`);
-  }
-}
-
-
-export class Room {
-  roomID: string
-
-  constructor(roomID: string) {
-    this.roomID = roomID;
   }
 }

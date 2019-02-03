@@ -1,31 +1,34 @@
 <h2>Rooms</h2>
 
-<div class="form-group">
-  <form class="form-row p-3" (ngSubmit)="createRoom()">
-    <div class="col-md-3 m-2">
-      <input type="text" class="form-control" [class.has-error]="roomForm.errors?.maxlength" placeholder="Create new room" [formControl]="roomForm">
-      <div  *ngIf="roomForm.errors?.maxlength" >
-        <small class="text-danger">Must be less than 20 characters long.</small>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <input type="submit" class="btn btn-primary m-2" value="Create">
-    </div>
-  </form> 
-</div>
+<hr />
 
+<form class="form-inline" (ngSubmit)="createRoom()">
+  <label class="ml-2 mr-2">Create new room:</label>
 
-<table class="table">
+  <input type="text" class="form-control mr-3" [formControl]="roomForm" [class.has-error]="roomForm.errors?.maxlength" placeholder="Name">
+
+  <input type="submit" class="btn btn-primary mr-3" value="Create">
+
+  <div *ngIf="roomForm.errors?.maxlength">
+    <small class="text-danger">Must be less than 10 characters long.</small>
+  </div>
+</form>
+
+<hr />
+
+<table class="table table-bordered table-hover">
   <thead>
       <tr>
-          <th>Name</th>
-          <th></th>
+          <th colspan="2">Name</th>
       </tr>
   </thead>
+
   <tbody>
     <tr *ngFor="let room of rooms" >
-      <td>{{ room.roomID }}</td>
-      <td><button class="btn btn-danger" (click)="deleteRoom(room)">Delete</button></td>
+      <td class="align-middle">{{ room.roomID }}</td>
+      <td class="align-middle">
+        <button class="btn btn-danger" (click)="deleteRoom(room)">Delete</button>
+      </td>
     </tr>
   </tbody>
 </table>

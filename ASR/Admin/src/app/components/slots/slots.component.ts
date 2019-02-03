@@ -13,14 +13,14 @@ export class SlotsComponent implements OnInit {
   slots: Slot[];
   students: User[];
   staffs: User[];
-  staffID:string = '';
+  staffID: string = '';
 
   constructor(private slotService: SlotService,private userService: UserService) { }
 
   ngOnInit() {
     this.getSlots();
     this.getUsers();
-  }
+  } 
 
   getSlots(): void {
     this.slotService.getSlots()
@@ -30,12 +30,18 @@ export class SlotsComponent implements OnInit {
 
   deleteSlot(slot: Slot): void {
     this.slotService.deleteSlot(slot)
-      .subscribe((data) =>this.ngOnInit());
+      .subscribe(() => {
+        this.getSlots();
+        this.getUsers();
+      });
   }
 
   updateSlotStudent(slot: Slot, student: string): void {
-    this.slotService.updateSlotStudent(slot,student)
-      .subscribe((data) =>this.ngOnInit());
+    this.slotService.updateSlotStudent(slot, student)
+      .subscribe(() => {
+        this.getSlots();
+        this.getUsers();
+      });
   }
 
   getUsers(): void {

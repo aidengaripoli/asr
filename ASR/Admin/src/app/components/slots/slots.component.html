@@ -1,12 +1,16 @@
 <h2>Slots</h2>
-<div class="form-row">
-  <div class="col-md-3 p-3">
+
+<hr />
+
+<div class="row">
+  <div class="col-md-3">
       <select class='custom-select' name="studentID" [(ngModel)]='studentID'> 
           <option value='' selected>Filter by students</option>
           <option *ngFor="let student of students">{{ student.schoolID }}</option>
       </select>
   </div>
-  <div class="col-md-3 p-3">
+
+  <div class="col-md-3">
     <select class='custom-select' name="staffID" [(ngModel)]='staffID'> 
         <option value='' selected>Filter by staff</option>
         <option *ngFor="let staff of staffs">{{ staff.schoolID }}</option>
@@ -14,7 +18,8 @@
   </div>
 </div>
 
-     
+<hr />
+
 <table class="table">
   <thead>
       <tr>
@@ -25,6 +30,7 @@
           <th></th>
       </tr>
   </thead>
+
   <tbody>
     <tr *ngFor="let slot of slots | filterByStaffOrStudentID : staffID | filterByStaffOrStudentID : studentID" >
       <td>{{ slot.startTime | date:"EE h a, dd MMMM yy" }}</td>

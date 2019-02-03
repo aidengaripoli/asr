@@ -14,7 +14,6 @@ namespace ASR.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
         private readonly ASRContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 

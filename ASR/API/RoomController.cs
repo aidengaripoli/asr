@@ -79,10 +79,12 @@ namespace ASR.API.Controllers
         public async Task<ActionResult> Delete(string id)
         {
             var room = await _context.Room.FirstOrDefaultAsync(r => r.RoomID == id);
+
             if (room == null)
             {
                 return NotFound();
             }
+
             _context.Room.Remove(room);
             await _context.SaveChangesAsync();
 

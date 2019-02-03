@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl,Validators } from '@angular/forms';
-import { RoomService,Room } from '../../services/room.service';
-
+import { FormControl, Validators } from '@angular/forms';
+import { RoomService } from '../../services/room.service';
+import { Room } from '../../room';
 
 @Component({
   selector: 'app-rooms',
@@ -10,7 +10,7 @@ import { RoomService,Room } from '../../services/room.service';
 })
 export class RoomsComponent implements OnInit {
   rooms: Room[];
-  roomForm = new FormControl('',[Validators.maxLength(20)]);
+  roomForm = new FormControl('', [Validators.maxLength(10)]);
 
   constructor(private roomService: RoomService) { }
 
@@ -25,14 +25,17 @@ export class RoomsComponent implements OnInit {
   
   deleteRoom(room: Room): void {
     this.roomService.deleteRoom(room)
-      .subscribe((data) =>this.ngOnInit());
+      .subscribe(() => this.getRooms());
   }
 
   createRoom(): void {
     if (this.roomForm.valid) {
-      let room = new Room (this.roomForm.value)
+      let room = new Room(this.roomForm.value)
+
       this.roomService.createRoom(room)
-        .subscribe((data) =>this.ngOnInit());
+        .subscribe(() => this.getRooms());
+
+      this.roomForm.setValue('');
     }
   }
 }
