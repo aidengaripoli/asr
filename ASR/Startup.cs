@@ -36,7 +36,7 @@ namespace ASR
             });
 
             services.AddDbContext<ASRContext>(options =>
-                options.UseSqlServer(
+                options.UseLazyLoadingProxies().UseSqlServer(
                     Configuration.GetConnectionString("ASRContextConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()

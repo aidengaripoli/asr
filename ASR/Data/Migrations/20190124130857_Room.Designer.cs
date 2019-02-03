@@ -4,14 +4,16 @@ using ASR.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ASR.Data.Migrations
 {
     [DbContext(typeof(ASRContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190124130857_Room")]
+    partial class Room
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,25 +85,6 @@ namespace ASR.Data.Migrations
                     b.HasKey("RoomID");
 
                     b.ToTable("Room");
-                });
-
-            modelBuilder.Entity("ASR.Models.Slot", b =>
-                {
-                    b.Property<string>("RoomID");
-
-                    b.Property<DateTime>("StartTime");
-
-                    b.Property<string>("StaffID");
-
-                    b.Property<string>("StudentID");
-
-                    b.HasKey("RoomID", "StartTime");
-
-                    b.HasIndex("StaffID");
-
-                    b.HasIndex("StudentID");
-
-                    b.ToTable("Slot");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -212,22 +195,6 @@ namespace ASR.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ASR.Models.Slot", b =>
-                {
-                    b.HasOne("ASR.Models.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ASR.Models.ApplicationUser", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffID");
-
-                    b.HasOne("ASR.Models.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

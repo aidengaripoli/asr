@@ -1,13 +1,15 @@
-﻿<!DOCTYPE html>
+@using ASR.Data
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - asr</title>
+    <title>@ViewData["Title"] - ASR</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/scss/bootstrap.scss" />
+        <link rel="stylesheet" href="~/lib/bootstrap/scss/bootstrap.scss" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister" />
     </environment>
@@ -37,6 +39,27 @@
                             Home <span class="sr-only">(current)</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Room" asp-action="Index">Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Slot" asp-action="Index">Slots</a>
+                    </li>
+                    @if (User.IsInRole(Constants.StudentRole))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Index">Students</a>
+                        </li>
+                    }
+                    @if (User.IsInRole(Constants.StaffRole))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Staff" asp-action="Index">Staff</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Slot" asp-action="Report">Report</a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a>
                     </li>

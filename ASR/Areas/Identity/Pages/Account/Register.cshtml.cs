@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
@@ -80,16 +80,16 @@ namespace ASR.Areas.Identity.Pages.Account
 
                 var user = new ApplicationUser { Name = Input.Name, UserName = Input.Email, Email = Input.Email, SchoolID = id };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
+                
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
                     var role = user.UserName.StartsWith('e')
-                    ? Constants.StaffRole
-                    : user.UserName.StartsWith('s')
-                    ? Constants.StudentRole
-                    : throw new Exception();
+                      ? Constants.StaffRole
+                      : user.UserName.StartsWith('s')
+                      ? Constants.StudentRole
+                      : throw new Exception();
 
                     await _userManager.AddToRoleAsync(user, role);
 

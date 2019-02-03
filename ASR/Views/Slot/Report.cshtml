@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Slot>
+
+@{
+    ViewData["Title"] = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2 class="mt-3 mb-3">Slot Report</h2>
+
+    <hr />
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Student)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.RoomID)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="3" class="text-center">You do not have any slots.</td>
+                </tr>
+            }
+
+            @foreach (var slot in Model)
+            {
+                <tr>
+                    <td class="align-middle text-center">@Html.DisplayFor(modelItem => slot.StartTime)</td>
+                    @if (slot.StudentID == null)
+                    {
+                        <td class="align-middle text-center">--</td>
+                    }
+                    else
+                    {
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => slot.Student.SchoolID)</td>
+                    }
+                    <td class="align-middle text-center">@Html.DisplayFor(modelItem => slot.RoomID)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

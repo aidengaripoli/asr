@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Slot>
+
+@{
+    ViewData["Title"] = "Availability";
+}
+
+<div class="container">
+    <h3 class="mt-3 mb-3">
+        Slot Availability
+    </h3>
+
+    <hr />
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Staff)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RoomID)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No slots available for this date.</td>
+                </tr>
+            }
+
+            @foreach (var slot in Model)
+            {
+                <tr>
+                    <td class="align-middle text-center">
+                        @Html.DisplayFor(modelItem => slot.StartTime)
+                    </td>
+                    <td class="align-middle text-center">
+                        @Html.DisplayFor(modelItem => slot.Staff.SchoolID)
+                    </td>
+                    <td class="align-middle text-center">
+                        @Html.DisplayFor(modelItem => slot.RoomID)
+                    </td>
+                    <td class="align-middle text-center">
+                        <form asp-action="Book">
+                            <input name="roomID" value="@slot.RoomID" type="hidden" />
+                            <input name="startTime" value="@slot.StartTime" type="hidden" />
+                            @if (slot.StudentID == null)
+                            {
+                                <input type="submit" value="Book" class="btn btn-success" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Cancel" class="btn btn-danger" />
+                            }
+
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
+
