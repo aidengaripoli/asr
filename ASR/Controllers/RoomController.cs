@@ -34,17 +34,16 @@ namespace ASR.Controllers
         [Authorize(Roles = Constants.StaffRole)]
         public async Task<IActionResult> Availability(RoomViewModel viewModel)
         {
-            var slotsOnDate =  _context.Slot.Where(s => s.StartTime == viewModel.StartTime);
-            
-            var availableRooms = from r in _context.Room
-                        join s in slotsOnDate on r.RoomID equals s.RoomID into x
-                        from p in x.DefaultIfEmpty()
-                        group p by r.RoomID into g
-                        where g.Count() < 2 || g == null
-                        select new Room()
-                        {
-                            RoomID = g.Key
-                        };
+            var roomIDsForDate = _context.Slot.Where(x => x.StartTime.Date == viewModel.StartTime)
+                .Select(x => x.RoomID)
+                .ToList();
+
+            var excludeRooms = roomIDsForDate.GroupBy(x => x)
+                .Where(g => g.Count() >= 2)
+                .Select(x => x.Key);
+
+            // get the rooms that are available
+            var availableRooms = _context.Room.Where(x => !excludeRooms.Contains(x.RoomID));
 
             return View(await availableRooms.ToListAsync());
         }
