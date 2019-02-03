@@ -27,7 +27,7 @@ namespace ASR.Controllers
         // GET: Staff
         public async Task<IActionResult> Index()
         {
-            var staff = await _userManager.GetUsersInRoleAsync("Staff");
+            var staff = await _userManager.GetUsersInRoleAsync(Constants.StaffRole);
             return View(staff);
         }
     }

@@ -1,0 +1,34 @@
+<h2>Rooms</h2>
+
+<hr />
+
+<form class="form-inline" (ngSubmit)="createRoom()">
+  <label class="ml-2 mr-2">Create new room:</label>
+
+  <input type="text" class="form-control mr-3" [formControl]="roomForm" [class.has-error]="roomForm.errors?.maxlength" placeholder="Name">
+
+  <input type="submit" class="btn btn-primary mr-3" value="Create">
+
+  <div *ngIf="roomForm.errors?.maxlength">
+    <small class="text-danger">Must be less than 10 characters long.</small>
+  </div>
+</form>
+
+<hr />
+
+<table class="table table-bordered table-hover">
+  <thead>
+      <tr>
+          <th colspan="2">Name</th>
+      </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let room of rooms" >
+      <td class="align-middle">{{ room.roomID }}</td>
+      <td class="align-middle">
+        <button class="btn btn-danger" (click)="deleteRoom(room)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
