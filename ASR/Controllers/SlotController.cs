@@ -24,8 +24,10 @@ namespace ASR.Controllers
         // GET: Slot
         public async Task<IActionResult> Index()
         {
+            // get all staff users
             var staff = _context.ApplicationUser.Where(x => x.SchoolID.StartsWith('e'));
 
+            // order slots by date and include staff and student relationships
             var slots = _context.Slot.Select(x => x)
                 .OrderBy(x => x.StartTime)
                 .Include(x => x.Student)
@@ -58,6 +60,7 @@ namespace ASR.Controllers
         [Authorize(Roles = Constants.StaffRole)]
         public async Task<IActionResult> Create(SlotRoomsViewModel slotRoomsViewModel)
         {
+            // get logged in user
             ApplicationUser currentUser = _context.ApplicationUser
                 .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
@@ -76,6 +79,7 @@ namespace ASR.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // re-fetch the rooms
             var rooms = _context.Room.Select(x => x.RoomID);
             slotRoomsViewModel.Rooms = new SelectList(await rooms.ToListAsync());
 
@@ -90,9 +94,11 @@ namespace ASR.Controllers
         {
             var slot = _context.Slot.FirstOrDefault(s => s.RoomID == roomID && s.StartTime == startTime);
 
+            // get current logged in user
             ApplicationUser currentUser = _context.ApplicationUser
                     .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
+            // check if the student has booked the maximum slots for the given date
             var studentBookedMaxForDate = _context.Slot
                 .FirstOrDefault(x => x.StartTime.Date == startTime.Date && x.StudentID == currentUser.Id) != null;
 
@@ -136,6 +142,7 @@ namespace ASR.Controllers
         [Authorize(Roles = Constants.StudentRole)]
         public async Task<IActionResult> Availability(Slot slot, string staffID)
         {
+            // get available slots for a given staff and date
             var availableSlots = _context.Slot.Where(x => x.Staff.SchoolID == staffID)
                 .Where(x => x.StartTime.Date == slot.StartTime.Date)
                 .Where(x => x.StudentID == null)
@@ -148,9 +155,11 @@ namespace ASR.Controllers
         [Authorize(Roles = Constants.StaffRole)]
         public async Task<IActionResult> Report()
         {
+            // get current logged in user
             ApplicationUser staff = _context.ApplicationUser
                     .FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
 
+            // get all slots for the given user and date
             var slots = _context.Slot.Where(x => x.StaffID == staff.Id)
                 .OrderBy(x => x.StartTime)
                 .Include(x => x.Student);

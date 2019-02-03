@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace ASR.API.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("CorsPolicy")]
@@ -29,7 +28,10 @@ namespace ASR.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Slot>>> Get(string staffID, string studentID)
         {
-            var slots = _context.Slot.Include(s => s.Staff).Include(s => s.Student).AsQueryable();
+            var slots = _context.Slot.Include(s => s.Staff)
+                .Include(s => s.Student)
+                .AsQueryable();
+
             if (staffID != null)
             {
                 slots = slots.Where(s => s.Staff.SchoolID == staffID);
@@ -48,11 +50,16 @@ namespace ASR.API.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Slot>> GetSlot(string roomID, DateTime startTime)
         {
-            var slot = await _context.Slot.Include(s => s.Staff).Include(s => s.Student).FirstOrDefaultAsync( s => s.StartTime == startTime && s.RoomID == roomID);
+            // get the slot with a given datetime and roomid, and include the staff and students
+            var slot = await _context.Slot.Include(s => s.Staff)
+                .Include(s => s.Student)
+                .FirstOrDefaultAsync(s => s.StartTime == startTime && s.RoomID == roomID);
+
             if (slot == null)
             {
                 return NotFound();
             }
+
             return slot;
         }
 
@@ -63,10 +70,12 @@ namespace ASR.API.Controllers
         public async Task<ActionResult<Slot>> PutSlotStudent(string roomID, DateTime startTime, [FromBody] string studentID)
         {
             var slot = await _context.Slot.FirstOrDefaultAsync(s => s.RoomID == roomID && s.StartTime == startTime);
+
             if (slot == null)
             {
                 return NotFound();
             }
+
             if (String.IsNullOrEmpty(studentID))
             {
                 slot.StudentID = null;
@@ -74,6 +83,7 @@ namespace ASR.API.Controllers
             else
             {
                 var student = await _context.Users.FirstOrDefaultAsync(u => u.SchoolID == studentID);
+
                 if (student == null)
                 {
                     return BadRequest();
@@ -93,6 +103,7 @@ namespace ASR.API.Controllers
         public async Task<ActionResult> Delete(string roomID, DateTime startTime)
         {
             var slot = await _context.Slot.FirstOrDefaultAsync(s => s.StartTime == startTime && s.RoomID == roomID);
+
             if (slot == null)
             {
                 return NotFound();

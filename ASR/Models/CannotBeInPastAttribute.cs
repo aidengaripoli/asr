@@ -9,6 +9,7 @@ namespace ASR.Models
         {
             var slotRoomsViewModel = (SlotRoomsViewModel)validationContext.ObjectInstance;
 
+            // throw validation error if datetime is less than the current datetime
             if (slotRoomsViewModel.StartTime < DateTime.Now)
             {
                 return new ValidationResult(GetErrorMessage());

@@ -34,10 +34,12 @@ namespace ASR.Controllers
         [Authorize(Roles = Constants.StaffRole)]
         public async Task<IActionResult> Availability(RoomViewModel viewModel)
         {
+            // gets all rooms for a given date
             var roomIDsForDate = _context.Slot.Where(x => x.StartTime.Date == viewModel.StartTime)
                 .Select(x => x.RoomID)
                 .ToList();
 
+            // get the rooms that have been booked twice or more
             var excludeRooms = roomIDsForDate.GroupBy(x => x)
                 .Where(g => g.Count() >= 2)
                 .Select(x => x.Key);

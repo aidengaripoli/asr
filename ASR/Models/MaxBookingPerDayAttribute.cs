@@ -19,10 +19,12 @@ namespace ASR.Models
 
             var service = (ASRContext)validationContext.GetService(typeof(ASRContext));
 
+            // get the number of slots created for a given room on a given date
             var numSlotsForRoomOnDate = service.Slot
                 .Where(x => x.RoomID == slotRoomsViewModel.RoomID && x.StartTime.Date == slotRoomsViewModel.StartTime.Date)
                 .Count();
 
+            // if the number of slots is greater than the maximum, throw a validation error
             if (numSlotsForRoomOnDate >= _maxBookingsPerDay)
             {
                 return new ValidationResult(GetErrorMessage());
